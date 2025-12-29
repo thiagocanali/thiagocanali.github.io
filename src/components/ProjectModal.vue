@@ -2,14 +2,11 @@
   <div v-if="show" class="overlay" @click.self="close">
     <div class="modal">
       <button class="close" @click="close">✕</button>
-
       <h2>{{ project.title }}</h2>
       <p>{{ project.description }}</p>
-
       <ul class="techs">
         <li v-for="tech in project.techs" :key="tech">{{ tech }}</li>
       </ul>
-
       <div class="links">
         <a :href="project.link" target="_blank" rel="noopener">Ver Projeto</a>
       </div>
@@ -19,16 +16,8 @@
 
 <script setup lang="ts">
 import type { Project } from '../data/projects'
-
-const props = defineProps<{
-  show: boolean
-  project: Project
-}>()
-
-const emit = defineEmits<{
-  (e: 'close'): void
-}>()
-
+const props = defineProps<{ show: boolean, project: Project }>()
+const emit = defineEmits<{ (e: 'close'): void }>()
 const close = () => emit('close')
 </script>
 
@@ -36,36 +25,38 @@ const close = () => emit('close')
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 200;
+  backdrop-filter: blur(2px);
 }
-
 .modal {
-  background: #1a1a1a; /* cor de fundo do modal */
-  padding: 1.8rem 2rem;
-  border-radius: 16px;
-  max-width: 500px;
+  background: var(--surface);
+  padding: 2rem 2.5rem;
+  border-radius: 18px;
+  max-width: 550px;
   width: 90%;
-  position: relative;
   text-align: center;
-  animation: fadeIn 0.25s ease;
-  color: #fff;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  animation: fadeIn 0.3s ease forwards;
+  color: var(--text);
 }
-
 .close {
   position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
+  top: 1rem;
+  right: 1rem;
   background: none;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   cursor: pointer;
-  color: #fff;
+  color: var(--muted);
+  transition: color 0.2s;
 }
-
+.close:hover {
+  color: var(--primary);
+}
 .techs {
   display: flex;
   flex-wrap: wrap;
@@ -73,30 +64,32 @@ const close = () => emit('close')
   list-style: none;
   padding: 0;
   justify-content: center;
-  margin-top: 0.8rem;
+  margin-top: 1rem;
 }
-
 .techs li {
-  font-size: 0.75rem;
-  background: #42b883; /* cor dos badges */
+  font-size: 0.78rem;
+  background: var(--primary);
   color: #000;
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 999px;
+  font-weight: 600;
 }
-
 .links a {
   display: inline-block;
-  margin-top: 1rem;
-  padding: 0.5rem 1.1rem;
-  border-radius: 8px;
-  background: #42b883; /* mesma cor dos badges */
-  color: #000;
+  margin-top: 1.2rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: 10px;
+  background: var(--primary-hover);
+  color: #fff;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  transition: transform 0.2s;
 }
-
+.links a:hover {
+  transform: scale(1.05);
+}
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-12px); }
+  from { opacity: 0; transform: translateY(-16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 </style>

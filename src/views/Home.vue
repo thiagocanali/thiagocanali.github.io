@@ -1,6 +1,7 @@
 <template>
   <section class="dashboard">
-    <h2>🚀 Projetos</h2>
+    <h2>⚡ Projetos em destaque</h2>
+    <p>Alguns projetos públicos disponíveis no GitHub Pages</p>
 
     <div class="grid">
       <ProjectCard
@@ -17,6 +18,10 @@
       :project="selectedProject"
       @close="closeModal"
     />
+
+    <p class="suggestion">
+      💬 <a href="https://forms.gle/yvVVwyz8YSM4xRGm9" target="_blank" rel="noopener">Deixe uma sugestão de melhoria</a>
+    </p>
   </section>
 </template>
 
@@ -54,5 +59,19 @@ const closeModal = () => {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
+}
+
+.suggestion {
+  margin-top: 2rem;
+  font-weight: 500;
+}
+
+.suggestion a {
+  color: var(--primary);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.suggestion a:hover {
+  color: var(--primary-hover);
 }
 </style>

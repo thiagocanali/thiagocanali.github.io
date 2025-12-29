@@ -15,20 +15,12 @@
 <script setup lang="ts">
 import type { Project } from '../data/projects'
 
-const props = defineProps<{
-  project: Project
-}>()
-
-const emit = defineEmits<{
-  (e: 'click'): void
-}>()
+const props = defineProps<{ project: Project }>()
+const emit = defineEmits<{ (e: 'click'): void }>()
 
 const heroStyle = {
-  background: `linear-gradient(
-    135deg,
-    ${props.project.color ?? '#42b883'}cc,
-    #0f172acc
-  )`
+  background: `linear-gradient(135deg, ${props.project.color ?? '#42b883'}88, #0f172a88)`,
+  transition: 'background 0.3s ease'
 }
 </script>
 
@@ -37,60 +29,58 @@ const heroStyle = {
   display: flex;
   flex-direction: column;
   background: var(--surface);
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
   text-decoration: none;
   color: inherit;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  cursor: pointer;
 }
-
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 26px rgba(0,0,0,0.35);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+  filter: brightness(1.05);
 }
-
 .hero {
-  padding: 1.8rem 1.4rem;
+  padding: 2rem 1.5rem;
   display: flex;
   align-items: flex-end;
-  min-height: 120px;
+  min-height: 140px;
+  border-bottom: 1px solid var(--border);
 }
-
 .hero h3 {
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
-
 .content {
-  padding: 1.2rem 1.4rem 1.4rem;
+  padding: 1.4rem 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.8rem;
 }
-
 .content p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--muted);
 }
-
 .techs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.5rem;
   list-style: none;
   padding: 0;
-  margin: 0.4rem 0 0;
+  margin-top: 0.5rem;
 }
-
 .techs li {
-  font-size: 0.72rem;
-  background: rgba(255,255,255,0.08);
-  color: var(--text);
-  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  background: rgba(66,184,131,0.15);
+  color: var(--primary);
+  padding: 0.3rem 0.7rem;
   border-radius: 999px;
+  font-weight: 500;
 }
 </style>

@@ -143,3 +143,24 @@ button:focus-visible {
     --border: #e5e7eb;
   }
 }
+
+/* src/style.css adicional */
+.dashboard h2 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+.dashboard h2::after {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 50%;
+  background: var(--primary);
+  margin-top: 0.25rem;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.dashboard h2:hover::after {
+  width: 100%;
+}
