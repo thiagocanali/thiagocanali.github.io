@@ -1,35 +1,35 @@
-<!-- src/App.vue -->
 <template>
-  <div id="app">
-    <header>
-      <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
-      </nav>
-    </header>
+  <AppHeader />
 
-    <router-view />
-  </div>
+  <main>
+    <RouterView v-slot="{ Component }">
+      <transition name="fade-slide" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </RouterView>
+  </main>
+
+  <AppFooter />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AppHeader from './components/AppHeader.vue'
+import AppFooter from './components/AppFooter.vue'
+</script>
 
-<style scoped>
-header {
-  background: #35495e;
-  color: #fff;
-  padding: 1rem;
-  text-align: center;
+<style>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-nav a {
-  color: #42b883;
-  text-decoration: none;
-  margin: 0 1rem;
-  font-weight: bold;
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-nav a.router-link-exact-active {
-  text-decoration: underline;
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>
