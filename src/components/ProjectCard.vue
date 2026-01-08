@@ -1,93 +1,88 @@
 <template>
-  <a class="card" @click="emit('click')" href="javascript:void(0)">
-    <div class="hero" :style="heroStyle">
-      <h3>{{ project.title }}</h3>
-    </div>
-    <div class="content">
-      <p>{{ project.description }}</p>
-      <ul class="techs">
-        <li v-for="tech in project.techs" :key="tech">{{ tech }}</li>
-      </ul>
-    </div>
-  </a>
+  <article class="card">
+    <header>
+      <h3>{{ project.name }}</h3>
+      <span v-if="project.language">{{ project.language }}</span>
+    </header>
+
+    <p class="description">
+      {{ project.description || 'Sem descrição' }}
+    </p>
+
+    <footer>
+      <a
+        class="primary"
+        :href="project.projectUrl"
+        target="_blank"
+        rel="noopener"
+      >
+        Ver projeto
+      </a>
+
+      <a
+        :href="project.githubUrl"
+        target="_blank"
+        rel="noopener"
+      >
+        GitHub
+      </a>
+    </footer>
+  </article>
 </template>
 
 <script setup lang="ts">
-import type { Project } from '../data/projects'
-import { computed } from 'vue'
-
-const props = defineProps<{ project: Project }>()
-const emit = defineEmits<{ (e: 'click'): void }>()
-
-const heroStyle = computed(() => ({
-  background: `linear-gradient(
-    135deg,
-    ${props.project.color ?? '#42b883'}cc,
-    #0f172acc
-  )`
-}))
+defineProps<{
+  project: {
+    name: string
+    description: string
+    projectUrl: string
+    githubUrl: string
+    language: string
+  }
+}>()
 </script>
 
 <style scoped>
 .card {
+  background: #0f0f0f;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  background: var(--surface);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  gap: 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header span {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.description {
+  opacity: 0.8;
+}
+
+footer {
+  display: flex;
+  gap: 1rem;
+}
+
+.primary {
+  color: #000;
+  background: #42b883;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
   text-decoration: none;
-  color: inherit;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  cursor: pointer;
 }
 
-.card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35);
-}
-
-.hero {
-  padding: 1.8rem 1.4rem;
-  display: flex;
-  align-items: flex-end;
-  min-height: 120px;
-}
-
-.hero h3 {
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.content {
-  padding: 1.2rem 1.4rem 1.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-}
-
-.content p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-
-.techs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  list-style: none;
-  padding: 0;
-  margin: 0.4rem 0 0;
-}
-
-.techs li {
-  font-size: 0.72rem;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
+footer a {
+  color: #42b883;
+  text-decoration: none;
 }
 </style>
