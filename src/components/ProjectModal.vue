@@ -1,91 +1,75 @@
 <template>
-  <div class="modal-backdrop" v-if="show" @click.self="$emit('close')">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button class="modal-close" @click="$emit('close')" aria-label="Fechar modal">×</button>
-      <h2 id="modal-title">{{ project.title }}</h2>
-      <p>{{ project.description }}</p>
-      <div class="techs">
-        <span
-          v-for="tech in project.techs"
-          :key="tech"
-          class="tag"
-          :style="{ backgroundColor: project.color }"
-          >{{ tech }}</span
-        >
-      </div>
-      <a :href="project.link" target="_blank" rel="noopener noreferrer">Abrir projeto</a>
+  <div class="modal-backdrop" @click.self="$emit('close')">
+    <div class="modal-content">
+      <header :style="{ backgroundColor: project.color }">
+        <h2>{{ project.title }}</h2>
+        <button @click="$emit('close')">✕</button>
+      </header>
+      <main>
+        <p>{{ project.description }}</p>
+        <ul v-if="project.techs.length">
+          <li v-for="tech in project.techs" :key="tech">{{ tech }}</li>
+        </ul>
+        <div class="links">
+          <a :href="project.githubUrl" target="_blank">GitHub</a>
+          <a :href="project.link" target="_blank">Ver projeto</a>
+        </div>
+      </main>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  show: boolean
-  project: {
-    title: string
-    description: string
-    techs: string[]
-    link: string
-    color: string
-  }
-}>()
+import type { GithubProject } from '../composables/useGithubProjects'
+
+defineProps<{ project: GithubProject }>()
 </script>
 
 <style scoped>
 .modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0,0,0,0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 999;
+  align-items: center;
+  z-index: 1000;
 }
-
 .modal-content {
-  background: white;
-  border-radius: 10px;
-  padding: 1.5rem;
-  max-width: 400px;
+  background: #fff;
+  border-radius: 8px;
   width: 90%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  position: relative;
+  max-width: 500px;
+  overflow: hidden;
 }
-
-.modal-close {
-  position: absolute;
-  top: 0.3rem;
-  right: 0.5rem;
-  background: transparent;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  padding: 1rem;
+}
+header button {
+  background: none;
   border: none;
-  font-size: 1.8rem;
+  font-size: 1.2rem;
+  color: #fff;
   cursor: pointer;
-  color: #555;
 }
-
-.techs {
-  margin: 1rem 0;
+main {
+  padding: 1rem;
 }
-
-.tag {
-  display: inline-block;
-  padding: 0.3rem 0.6rem;
-  margin-right: 0.3rem;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  color: white;
+.links {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
 }
-
-a {
-  font-weight: 600;
-  color: var(--primary, #42b883);
+.links a {
+  color: #42b883;
   text-decoration: none;
+  font-weight: 600;
 }
-
-a:hover {
+.links a:hover {
   text-decoration: underline;
 }
 </style>

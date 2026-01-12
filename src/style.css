@@ -1,84 +1,246 @@
-/* =====================
-   RESET + BASE
-===================== */
+/* ===========================
+   RESET / BASE
+=========================== */
 *,
 *::before,
-*::after { box-sizing: border-box; }
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-}
-
-/* =====================
-   THEMES
-===================== */
-:root {
-  --bg: #121212;
-  --surface: #1e1e1e;
-  --text: rgba(255,255,255,0.9);
-  --muted: #9ca3af;
-  --primary: #42b883;
-  --primary-hover: #36a173;
-  --border: #2a2a2a;
-
-  color-scheme: dark;
+  font-family: 'Inter', sans-serif;
   background-color: var(--bg);
   color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
 }
 
-[data-theme='light'] {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --text: #213547;
-  --muted: #475569;
-  --border: #e5e7eb;
-
-  color-scheme: light;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-#app { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+/* ===========================
+   VARIABLES
+=========================== */
+:root {
+  --bg: #f5f5f5;
+  --text: #1a1a1a;
+  --text-muted: #555;
+  --primary-color: #4f46e5;
+  --primary-color-hover: #3730a3;
+  --card-bg: #ffffff;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-hover: 0 4px 20px rgba(0,0,0,0.15);
+  --tag-bg: #e0e0e0;
+  --tag-text: #333;
+  --error-color: #b91c1c;
+  --skeleton-bg: #ddd;
+}
 
-/* =====================
-   TIPOGRAFIA
-===================== */
-h1, h2, h3, h4 { margin: 0 0 0.75rem; font-weight: 600; line-height: 1.25; }
-h1 { font-size: clamp(2.2rem, 4vw, 3rem); }
-h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
-p { margin: 0 0 1rem; color: var(--muted); }
+/* DARK MODE */
+body.dark {
+  --bg: #121212;
+  --text: #f5f5f5;
+  --text-muted: #aaa;
+  --card-bg: #1e1e1e;
+  --shadow: 0 2px 8px rgba(0,0,0,0.5);
+  --shadow-hover: 0 4px 20px rgba(0,0,0,0.6);
+  --tag-bg: #333;
+  --tag-text: #f5f5f5;
+  --primary-color: #6366f1;
+  --primary-color-hover: #4f46e5;
+  --skeleton-bg: #2c2c2c;
+}
 
-/* =====================
-   LINKS
-===================== */
-a { color: var(--primary); font-weight: 500; text-decoration: none; transition: color 0.2s ease; }
-a:hover { color: var(--primary-hover); }
-
-/* =====================
-   BOTÕES
-===================== */
-button {
-  appearance: none;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  padding: 0.6em 1.2em;
-  font-size: 0.95rem;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--surface);
+/* ===========================
+   HEADINGS / TEXT
+=========================== */
+h1, h2, h3, h4 {
   color: var(--text);
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+}
+p {
+  color: var(--text-muted);
+  line-height: 1.6;
 }
 
-button:hover { border-color: var(--primary); }
-button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+/* ===========================
+   BUTTONS
+=========================== */
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
 
-/* =====================
-   CONTAINERS
-===================== */
-.container { max-width: 1280px; margin: 0 auto; }
-.text-center { text-align: center; }
+.btn-github {
+  background-color: #24292f;
+  color: #fff;
+}
+.btn-github:hover {
+  background-color: #000;
+}
+
+.btn-project {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.btn-project:hover {
+  background-color: var(--primary-color-hover);
+}
+
+/* ===========================
+   DASHBOARD / GRID
+=========================== */
+.dashboard {
+  padding: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===========================
+   CARDS
+=========================== */
+.project-card {
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+.project-card h3 {
+  margin-bottom: 0.5rem;
+}
+.project-card p {
+  font-size: 0.9rem;
+}
+
+/* ===========================
+   MODAL
+=========================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ===========================
+   TAGS
+=========================== */
+.tags {
+  margin: 1rem 0;
+}
+.tag {
+  display: inline-block;
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.3rem;
+  border-radius: 6px;
+}
+
+/* ===========================
+   SKELETON LOADER
+=========================== */
+.skeleton {
+  background: var(--skeleton-bg);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: loading 1.2s infinite;
+}
+@keyframes loading {
+  0% { left: -150px; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* ===========================
+   ANIMATIONS
+=========================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* ===========================
+   HEADER + FOOTER
+=========================== */
+header {
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header h1 {
+  font-size: 1.5rem;
+}
+header button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 1.5rem 2rem;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow);
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

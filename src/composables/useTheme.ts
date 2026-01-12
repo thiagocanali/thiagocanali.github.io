@@ -1,23 +1,25 @@
-import { ref, watchEffect } from 'vue'
-
-type Theme = 'dark' | 'light'
-
-const theme = ref<Theme>(
-  (localStorage.getItem('theme') as Theme) || 'dark'
-)
+import { ref, watch, onMounted } from 'vue'
 
 export function useTheme() {
-  const toggleTheme = () => {
-    theme.value = theme.value === 'dark' ? 'light' : 'dark'
-  }
+  const theme = ref<'light' | 'dark'>('light')
 
-  watchEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme.value)
-    localStorage.setItem('theme', theme.value)
+  // Carrega do localStorage ou define padrão
+  onMounted(() => {
+    const saved = localStorage.getItem('theme') as 'light' | 'dark' | null
+    if (saved) theme.value = saved
+    applyTheme(theme.value)
   })
 
-  return {
-    theme,
-    toggleTheme
+  // Aplica tema e salva
+  function applyTheme(value: 'light' | 'dark') {
+    document.documentElement.setAttribute('data-theme', value)
+    localStorage.setItem('theme', value)
   }
+
+  function toggleTheme() {
+    theme.value = theme.value === 'light' ? 'dark' : 'light'
+    applyTheme(theme.value)
+  }
+
+  return { theme, toggleTheme }
 }
