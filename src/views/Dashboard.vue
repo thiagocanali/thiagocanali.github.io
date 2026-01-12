@@ -1,28 +1,33 @@
 <template>
   <section class="dashboard">
-    <h2>⚡ Projetos em destaque</h2>
-    <p>Projetos publicados automaticamente via GitHub Pages</p>
+    <h2>⚡ Projetos</h2>
+    <p>Busque, filtre e explore meus projetos</p>
 
-    <div class="grid">
-      <!-- Skeleton Loader -->
-      <ProjectSkeleton
-        v-if="loading"
-        v-for="n in 6"
-        :key="n"
+    <!-- CONTROLES -->
+    <div class="controls">
+      <input
+        v-model="search"
+        placeholder="Buscar projeto..."
       />
 
-      <!-- Cards -->
+      <select v-model="tech">
+        <option value="">Todas tecnologias</option>
+        <option v-for="t in techs" :key="t" :value="t">
+          {{ t }}
+        </option>
+      </select>
+    </div>
+
+    <div class="grid">
+      <ProjectSkeleton v-if="loading" v-for="n in 6" :key="n" />
+
       <ProjectCard
-        v-for="project in projects"
+        v-for="project in filteredProjects"
         :key="project.id"
         :project="project"
         @click="openModal(project)"
       />
     </div>
-
-    <p v-if="error" class="error">
-      ⚠️ Não foi possível carregar os projetos agora.
-    </p>
 
     <ProjectModal
       v-if="selectedProject"
@@ -33,40 +38,63 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import ProjectCard from '../components/ProjectCard.vue'
 import ProjectModal from '../components/ProjectModal.vue'
 import ProjectSkeleton from '../components/ProjectSkeleton.vue'
 import { useGithubProjects, type GithubProject } from '../composables/useGithubProjects'
+import { useSeo } from '../composables/useSeo'
 
-// Busca projetos do GitHub
-const { projects, loading, error } = useGithubProjects('thiagocanali')
+useSeo({
+  title: 'Thiago Canali | Projetos',
+  description: 'Portfólio com projetos em Vue, TypeScript e aplicações web modernas'
+})
 
-// Modal
+const { projects, loading } = useGithubProjects('thiagocanali')
+
+const search = ref('')
+const tech = ref('')
+
+const techs = computed(() =>
+  [...new Set(projects.value.flatMap(p => p.techs))]
+)
+
+const filteredProjects = computed(() =>
+  projects.value
+    .filter(p =>
+      p.title.toLowerCase().includes(search.value.toLowerCase())
+    )
+    .filter(p => !tech.value || p.techs.includes(tech.value))
+    .sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1
+      if (!a.pinned && b.pinned) return 1
+      return b.stars - a.stars
+    })
+)
+
 const selectedProject = ref<GithubProject | null>(null)
 
 function openModal(project: GithubProject) {
   selectedProject.value = project
 }
-
 function closeModal() {
   selectedProject.value = null
 }
 </script>
 
 <style scoped>
-.dashboard {
-  padding: 2rem;
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.error {
-  color: var(--error-color);
-  margin-top: 1rem;
+.controls input,
+.controls select {
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--tag-bg);
+  background: var(--card-bg);
+  color: var(--text);
 }
 </style>

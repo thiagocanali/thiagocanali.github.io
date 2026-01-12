@@ -10,6 +10,7 @@ export interface GithubProject {
   color: string
   stars: number
   updatedAt: string
+  pinned?: boolean
 }
 
 const CACHE_KEY = 'github-projects-cache'
@@ -19,26 +20,6 @@ export function useGithubProjects(username: string) {
   const projects = ref<GithubProject[]>([])
   const loading = ref(true)
   const error = ref<string | null>(null)
-
-  function loadFromCache() {
-    const cached = localStorage.getItem(CACHE_KEY)
-    if (!cached) return false
-
-    const { data, timestamp } = JSON.parse(cached)
-    const isExpired = Date.now() - timestamp > CACHE_TTL
-
-    if (isExpired) return false
-
-    projects.value = data
-    return true
-  }
-
-  function saveToCache(data: GithubProject[]) {
-    localStorage.setItem(
-      CACHE_KEY,
-      JSON.stringify({ data, timestamp: Date.now() })
-    )
-  }
 
   function getColorByLanguage(language: string | null) {
     const colors: Record<string, string> = {
@@ -53,19 +34,48 @@ export function useGithubProjects(username: string) {
     return language ? colors[language] || colors.default : colors.default
   }
 
+  function loadFromCache(): boolean {
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (!cached) return false
+
+    try {
+      const { data, timestamp } = JSON.parse(cached)
+      if (Date.now() - timestamp > CACHE_TTL) return false
+
+      projects.value = data
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  function saveToCache(data: GithubProject[]) {
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        data,
+        timestamp: Date.now(),
+      })
+    )
+  }
+
   async function fetchFromGitHub() {
     const response = await fetch(
       `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`
     )
 
-    if (!response.ok) throw new Error('Erro ao buscar repositórios')
+    if (!response.ok) {
+      throw new Error('Erro ao buscar repositórios')
+    }
 
     const repos = await response.json()
 
-    const filtered: GithubProject[] = repos
+    const mapped: GithubProject[] = repos
       .filter(
         (repo: any) =>
-          repo.has_pages && !repo.fork && repo.name !== `${username}.github.io`
+          repo.has_pages &&
+          !repo.fork &&
+          repo.name !== `${username}.github.io`
       )
       .map((repo: any) => ({
         id: repo.id,
@@ -77,29 +87,26 @@ export function useGithubProjects(username: string) {
         color: getColorByLanguage(repo.language),
         stars: repo.stargazers_count,
         updatedAt: repo.updated_at,
+        pinned: repo.stargazers_count >= 10,
       }))
-      .sort(
-        (a: GithubProject, b: GithubProject) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-      )
 
-    projects.value = filtered
-    saveToCache(filtered)
+    projects.value = mapped
+    saveToCache(mapped)
   }
 
-  async function loadProjects() {
+  onMounted(async () => {
     try {
-      const loadedFromCache = loadFromCache()
-      if (!loadedFromCache) await fetchFromGitHub()
+      const loaded = loadFromCache()
+      if (!loaded) {
+        await fetchFromGitHub()
+      }
     } catch (err: any) {
       error.value = err.message
       loadFromCache() // fallback offline
     } finally {
       loading.value = false
     }
-  }
-
-  onMounted(loadProjects)
+  })
 
   return { projects, loading, error }
 }

@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '../views/Dashboard.vue'
-import About from '../views/About.vue'
-import Experience from '../views/Experience.vue'
-import Contact from '../views/Contact.vue'
+const Dashboard = () => import('../views/Dashboard.vue')
+const About = () => import('../views/About.vue')
+const Experience = () => import('../views/Experience.vue')
+const Contact = () => import('../views/Contact.vue')
 
 const router = createRouter({
   history: createWebHistory('/'),
