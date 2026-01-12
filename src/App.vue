@@ -1,15 +1,20 @@
 <template>
   <AppHeader />
-  <Dashboard />
+
+  <main class="app-content">
+    <router-view />
+  </main>
+
   <AppFooter />
 </template>
 
 <script setup lang="ts">
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
-import Dashboard from './views/Dashboard.vue'
 </script>
 
-<style>
-/* body styles já estão no style.css */
+<style scoped>
+.app-content {
+  min-height: calc(100vh - 160px);
+}
 </style>

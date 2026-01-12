@@ -1,14 +1,23 @@
 <template>
   <header>
-    <h1>Thiago Canali</h1>
-    <div class="header-actions">
+    <h1 class="logo">
+      <router-link to="/">Thiago Canali</router-link>
+    </h1>
+
+    <nav>
+      <router-link to="/" exact-active-class="active">Projetos</router-link>
+      <router-link to="/about" exact-active-class="active">Sobre</router-link>
+      <router-link to="/experience" exact-active-class="active">Experiência</router-link>
+      <router-link to="/contact" exact-active-class="active">Contato</router-link>
+    </nav>
+
+    <div class="actions">
       <button @click="toggle">
-        <span v-if="darkMode">🌞 Light</span>
-        <span v-else>🌙 Dark</span>
+        {{ darkMode ? '🌞' : '🌙' }}
       </button>
+
       <a href="https://github.com/thiagocanali" target="_blank">GitHub</a>
       <a href="https://www.linkedin.com/in/thiagocanali/" target="_blank">LinkedIn</a>
-      <a href="/resume.pdf" target="_blank">CV</a>
     </div>
   </header>
 </template>
@@ -22,47 +31,63 @@ const { darkMode, toggle } = useDarkMode()
 <style scoped>
 header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
   background-color: var(--card-bg);
   box-shadow: var(--shadow);
   position: sticky;
   top: 0;
   z-index: 10;
-  border-radius: 0 0 12px 12px;
 }
 
-h1 {
-  font-size: 1.5rem;
+.logo a {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
 }
 
-.header-actions {
+nav {
+  display: flex;
+  gap: 1.2rem;
+}
+
+nav a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--primary-color);
+}
+
+nav a.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.actions {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.header-actions button {
-  cursor: pointer;
+.actions button {
   background: none;
   border: none;
-  font-size: 0.9rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  transition: background 0.3s;
-}
-.header-actions button:hover {
-  background: var(--tag-bg);
+  cursor: pointer;
+  font-size: 1.1rem;
 }
 
-.header-actions a {
+.actions a {
   font-size: 0.9rem;
-  color: var(--text);
   font-weight: 500;
-  transition: color 0.3s;
+  color: var(--text);
 }
-.header-actions a:hover {
+
+.actions a:hover {
   color: var(--primary-color);
 }
 </style>
