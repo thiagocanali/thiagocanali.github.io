@@ -2,7 +2,11 @@
   <section class="dashboard">
     <div class="intro">
       <h2>⚡ Projetos</h2>
-      <p>Explorando tecnologias de ponta com foco em estabilidade.</p>
+      <p>Uma coleção de projetos para estudar, testar e evoluir como desenvolvedor.</p>
+      <p>
+        Para acessar um projeto, clique em <strong>"Ver projeto"</strong>.
+        Você será redirecionado para a página publicada no GitHub Pages.
+      </p>
     </div>
 
     <div class="controls">
@@ -15,12 +19,8 @@
 
     <div class="grid">
       <ProjectSkeleton v-if="loading" v-for="n in 6" :key="n" />
-      <ProjectCard
-        v-for="project in filteredProjects"
-        :key="project.id"
-        :project="project"
-        @click="openModal(project)"
-      />
+      <ProjectCard v-for="project in filteredProjects" :key="project.id" :project="project"
+        @click="openModal(project)" />
     </div>
 
     <ProjectModal v-if="selectedProject" :project="selectedProject" @close="closeModal" />
@@ -53,7 +53,10 @@ const closeModal = () => selectedProject.value = null
 </script>
 
 <style scoped>
-.intro { margin-bottom: 2rem; }
+.intro {
+  margin-bottom: 2rem;
+}
+
 .controls {
   display: flex;
   flex-direction: column;
@@ -61,7 +64,8 @@ const closeModal = () => selectedProject.value = null
   margin-bottom: 2rem;
 }
 
-.search-input, .tech-select {
+.search-input,
+.tech-select {
   padding: 0.8rem;
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -71,8 +75,16 @@ const closeModal = () => selectedProject.value = null
 }
 
 @media (min-width: 640px) {
-  .controls { flex-direction: row; }
-  .search-input { flex: 2; }
-  .tech-select { flex: 1; }
+  .controls {
+    flex-direction: row;
+  }
+
+  .search-input {
+    flex: 2;
+  }
+
+  .tech-select {
+    flex: 1;
+  }
 }
 </style>

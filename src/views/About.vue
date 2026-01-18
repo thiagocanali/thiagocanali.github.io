@@ -9,7 +9,7 @@
       <div class="content-grid">
         <div class="bio-section">
           <p>
-            Natural de Curitiba/PR e hoje radicado em Blumenau/SC, sou um profissional de TI que acredita que 
+            Natural de Curitiba/PR e hoje vivendo em Blumenau/SC, sou um profissional de TI que acredita que 
             <strong>desenvolvimento e operação devem caminhar juntos</strong>.
           </p>
           <p>

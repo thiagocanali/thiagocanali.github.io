@@ -78,7 +78,7 @@
         <div class="edu-card">
           <h3>Educação</h3>
           <p><strong>Análise e Desenvolvimento de Sistemas</strong></p>
-          <p>Formação sólida em engenharia de software.</p>
+          <p>Formação em desenvolvimento de software com ênfase em aplicações web, banco de dados e projetos de sistemas.</p>
         </div>
         <div class="edu-card">
           <h3>Formação Complementar</h3>
