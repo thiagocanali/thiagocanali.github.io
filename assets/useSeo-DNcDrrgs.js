@@ -1,1 +1,0 @@
-import{l as o}from"./index-BUMkjgBC.js";function m({title:t,description:n}){o(()=>{document.title=t;{let e=document.querySelector('meta[name="description"]');e||(e=document.createElement("meta"),e.name="description",document.head.appendChild(e)),e.content=n}})}export{m as u};
