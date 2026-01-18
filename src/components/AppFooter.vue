@@ -1,43 +1,61 @@
 <template>
   <footer>
-    <p>© {{ new Date().getFullYear() }} Thiago Canali. Todos os direitos reservados.</p>
-    <div class="footer-links">
+    <div class="status-bar">
+      <span class="pulse"></span>
+      <span class="status-text">All systems operational - 24x7 Monitor</span>
+    </div>
+    <p>© {{ new Date().getFullYear() }} Thiago Canali</p>
+    <div class="links">
       <a href="https://github.com/thiagocanali" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/thiagocanali/" target="_blank">LinkedIn</a>
-      <a href="/resume.pdf" target="_blank">CV</a>
+      <a href="https://linkedin.com/in/thiagocanali" target="_blank">LinkedIn</a>
     </div>
   </footer>
 </template>
 
-<script setup lang="ts">
-</script>
-
 <style scoped>
 footer {
+  padding: 2rem;
   text-align: center;
-  padding: 1.5rem 2rem;
-  background-color: var(--card-bg);
-  box-shadow: var(--shadow);
-  margin-top: 3rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  border-radius: 12px 12px 0 0;
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
 }
 
-.footer-links {
-  margin-top: 0.5rem;
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: var(--status-green);
+  font-weight: 600;
+}
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  background: var(--status-green);
+  border-radius: 50%;
+  box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.links {
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.footer-links a {
+.links a {
   font-size: 0.85rem;
-  color: var(--text);
-  font-weight: 500;
-  transition: color 0.3s;
-}
-.footer-links a:hover {
-  color: var(--primary-color);
+  color: var(--text-muted);
+  text-decoration: none;
 }
 </style>

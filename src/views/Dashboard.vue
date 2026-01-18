@@ -1,26 +1,20 @@
 <template>
   <section class="dashboard">
-    <h2>⚡ Projetos</h2>
-    <p>Busque, filtre e explore meus projetos</p>
+    <div class="intro">
+      <h2>⚡ Projetos</h2>
+      <p>Explorando tecnologias de ponta com foco em estabilidade.</p>
+    </div>
 
-    <!-- CONTROLES -->
     <div class="controls">
-      <input
-        v-model="search"
-        placeholder="Buscar projeto..."
-      />
-
-      <select v-model="tech">
-        <option value="">Todas tecnologias</option>
-        <option v-for="t in techs" :key="t" :value="t">
-          {{ t }}
-        </option>
+      <input v-model="search" placeholder="Filtrar projetos..." class="search-input" />
+      <select v-model="tech" class="tech-select">
+        <option value="">Todas as Stacks</option>
+        <option v-for="t in techs" :key="t" :value="t">{{ t }}</option>
       </select>
     </div>
 
     <div class="grid">
       <ProjectSkeleton v-if="loading" v-for="n in 6" :key="n" />
-
       <ProjectCard
         v-for="project in filteredProjects"
         :key="project.id"
@@ -29,11 +23,7 @@
       />
     </div>
 
-    <ProjectModal
-      v-if="selectedProject"
-      :project="selectedProject"
-      @close="closeModal"
-    />
+    <ProjectModal v-if="selectedProject" :project="selectedProject" @close="closeModal" />
   </section>
 </template>
 
@@ -43,58 +33,46 @@ import ProjectCard from '../components/ProjectCard.vue'
 import ProjectModal from '../components/ProjectModal.vue'
 import ProjectSkeleton from '../components/ProjectSkeleton.vue'
 import { useGithubProjects, type GithubProject } from '../composables/useGithubProjects'
-import { useSeo } from '../composables/useSeo'
-
-useSeo({
-  title: 'Thiago Canali | Projetos',
-  description: 'Portfólio com projetos em Vue, TypeScript e aplicações web modernas'
-})
 
 const { projects, loading } = useGithubProjects('thiagocanali')
-
 const search = ref('')
 const tech = ref('')
 
-const techs = computed(() =>
-  [...new Set(projects.value.flatMap(p => p.techs))]
-)
+const techs = computed(() => [...new Set(projects.value.flatMap(p => p.techs))])
 
 const filteredProjects = computed(() =>
   projects.value
-    .filter(p =>
-      p.title.toLowerCase().includes(search.value.toLowerCase())
-    )
+    .filter(p => p.title.toLowerCase().includes(search.value.toLowerCase()))
     .filter(p => !tech.value || p.techs.includes(tech.value))
-    .sort((a, b) => {
-      if (a.pinned && !b.pinned) return -1
-      if (!a.pinned && b.pinned) return 1
-      return b.stars - a.stars
-    })
+    .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
 )
 
 const selectedProject = ref<GithubProject | null>(null)
-
-function openModal(project: GithubProject) {
-  selectedProject.value = project
-}
-function closeModal() {
-  selectedProject.value = null
-}
+const openModal = (p: GithubProject) => selectedProject.value = p
+const closeModal = () => selectedProject.value = null
 </script>
 
 <style scoped>
+.intro { margin-bottom: 2rem; }
 .controls {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  margin: 1.5rem 0;
+  margin-bottom: 2rem;
 }
 
-.controls input,
-.controls select {
-  padding: 0.6rem;
+.search-input, .tech-select {
+  padding: 0.8rem;
   border-radius: 8px;
-  border: 1px solid var(--tag-bg);
+  border: 1px solid var(--border);
   background: var(--card-bg);
   color: var(--text);
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .controls { flex-direction: row; }
+  .search-input { flex: 2; }
+  .tech-select { flex: 1; }
 }
 </style>

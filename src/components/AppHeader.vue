@@ -1,93 +1,83 @@
 <template>
   <header>
-    <h1 class="logo">
-      <router-link to="/">Thiago Canali</router-link>
-    </h1>
+    <div class="header-container">
+      <h1 class="logo">
+        <router-link to="/">TCS<span>.</span></router-link>
+      </h1>
 
-    <nav>
-      <router-link to="/" exact-active-class="active">Projetos</router-link>
-      <router-link to="/about" exact-active-class="active">Sobre</router-link>
-      <router-link to="/experience" exact-active-class="active">Experiência</router-link>
-      <router-link to="/contact" exact-active-class="active">Contato</router-link>
-    </nav>
+      <nav class="desktop-nav">
+        <router-link to="/">Projetos</router-link>
+        <router-link to="/about">Sobre</router-link>
+        <router-link to="/experience">Experiência</router-link>
+      </nav>
 
-    <div class="actions">
-      <button @click="toggle">
-        {{ darkMode ? '🌞' : '🌙' }}
-      </button>
-
-      <a href="https://github.com/thiagocanali" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/thiagocanali/" target="_blank">LinkedIn</a>
+      <div class="actions">
+        <button @click="toggle" class="theme-btn">
+          {{ darkMode ? '🌞' : '🌙' }}
+        </button>
+      </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
 import { useDarkMode } from '../composables/useDarkMode'
-
 const { darkMode, toggle } = useDarkMode()
 </script>
 
 <style scoped>
 header {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: var(--card-bg);
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
 .logo a {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: var(--text);
+  text-decoration: none;
 }
+
+.logo span { color: var(--primary-color); }
 
 nav {
   display: flex;
-  gap: 1.2rem;
-}
-
-nav a {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  transition: color 0.3s;
-}
-
-nav a:hover {
-  color: var(--primary-color);
-}
-
-nav a.active {
-  color: var(--primary-color);
-  font-weight: 600;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
   gap: 1rem;
 }
 
-.actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.actions a {
+nav a {
+  text-decoration: none;
+  color: var(--text-muted);
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text);
 }
 
-.actions a:hover {
+nav a.router-link-active {
   color: var(--primary-color);
+}
+
+@media (max-width: 640px) {
+  nav { gap: 0.5rem; }
+  nav a { font-size: 0.8rem; }
+}
+
+.theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
 }
 </style>
