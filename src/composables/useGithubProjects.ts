@@ -13,10 +13,11 @@ export interface GithubProject {
   pinned?: boolean
 }
 
-const CACHE_KEY = 'github-projects-cache'
+const CACHE_KEY_PREFIX = 'github-projects-cache'
 const CACHE_TTL = 1000 * 60 * 60 * 6 // 6 horas
 
 export function useGithubProjects(username: string) {
+  const cacheKey = `${CACHE_KEY_PREFIX}:${username.toLowerCase()}`
   const projects = ref<GithubProject[]>([])
   const loading = ref(true)
   const error = ref<string | null>(null)
@@ -35,12 +36,14 @@ export function useGithubProjects(username: string) {
   }
 
   function loadFromCache(): boolean {
-    const cached = localStorage.getItem(CACHE_KEY)
+    const cached = localStorage.getItem(cacheKey)
     if (!cached) return false
 
     try {
       const { data, timestamp } = JSON.parse(cached)
       if (Date.now() - timestamp > CACHE_TTL) return false
+
+      if (!Array.isArray(data)) return false
 
       projects.value = data
       return true
@@ -51,7 +54,7 @@ export function useGithubProjects(username: string) {
 
   function saveToCache(data: GithubProject[]) {
     localStorage.setItem(
-      CACHE_KEY,
+      cacheKey,
       JSON.stringify({
         data,
         timestamp: Date.now(),

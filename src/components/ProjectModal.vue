@@ -3,9 +3,17 @@
     <div
       class="modal"
       role="dialog"
+      aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <button class="close-btn" @click="$emit('close')">✕</button>
+      <button
+        class="close-btn"
+        type="button"
+        aria-label="Fechar detalhes do projeto"
+        @click="$emit('close')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
 
       <h2 id="modal-title">{{ project.title }}</h2>
       <p class="description">{{ project.description }}</p>
@@ -29,6 +37,7 @@
           class="btn btn-github"
           :href="project.githubUrl"
           target="_blank"
+          rel="noopener noreferrer"
         >
           GitHub
         </a>
@@ -36,6 +45,7 @@
           class="btn btn-project"
           :href="project.link"
           target="_blank"
+          rel="noopener noreferrer"
         >
           Ver projeto
         </a>

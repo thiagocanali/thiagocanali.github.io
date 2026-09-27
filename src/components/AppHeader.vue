@@ -5,15 +5,21 @@
         <router-link to="/">TCS<span>.</span></router-link>
       </h1>
 
-      <nav class="desktop-nav">
-        <router-link to="/">Projetos</router-link>
+      <nav class="desktop-nav" aria-label="Navegação principal">
+        <router-link to="/" :exact-active-class="'router-link-exact-active'">Projetos</router-link>
         <router-link to="/about">Sobre</router-link>
         <router-link to="/experience">Experiência</router-link>
       </nav>
 
       <div class="actions">
-        <button @click="toggle" class="theme-btn">
-          {{ darkMode ? '🌞' : '🌙' }}
+        <button
+          type="button"
+          @click="toggle"
+          class="theme-btn"
+          :aria-label="darkMode ? 'Ativar tema claro' : 'Ativar tema escuro'"
+          :aria-pressed="darkMode"
+        >
+          <span aria-hidden="true">{{ darkMode ? 'Tema claro' : 'Tema escuro' }}</span>
         </button>
       </div>
     </div>
